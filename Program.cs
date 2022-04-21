@@ -13,16 +13,16 @@ namespace AutoBackupTool
     {
         private static IAmazonS3 _s3Client;
 
-        private const string BUCKET_NAME = "hamisheh-backup-database";
-        private const string OBJECT_NAME = "abc.txt";
+        //private const string BUCKET_NAME = "hamisheh-backup-database";
+        //private const string OBJECT_NAME = "abc.txt";
         
         private static Config DomainConfigs;
         private static toolbox.Tools_Communication methods_com = new toolbox.Tools_Communication();
         static async Task Main()
         {
-            
+
             StreamReader streamReader = new StreamReader(System.IO.Path.GetDirectoryName(
-      System.Reflection.Assembly.GetExecutingAssembly().Location)+"/config.json");
+      System.Reflection.Assembly.GetExecutingAssembly().Location) + "/config.json");
             string JsonConfig = streamReader.ReadToEnd();
             DomainConfigs = methods_com.DeserializeString<Config>(JsonConfig);
 
@@ -43,7 +43,11 @@ namespace AutoBackupTool
                     var path = $"{item.Path}/{myFile.Name}";
                     Console.WriteLine("\n\n Please Wait, Object is uploading....... \n\n");
                     await UploadObjectFromFileAsync(_s3Client, item.BucketName, myFile.Name, path);
-                    
+
+                }
+                else
+                {
+                    writeLogs($"The directory {item.Path} didn't exist");
                 }
             }
             //Console.ReadKey();
@@ -74,13 +78,31 @@ namespace AutoBackupTool
                 {
                     Console.WriteLine($"{prop.Name}: {prop.GetValue(response, null)}");
                 }
-
-                Console.WriteLine($"Object {OBJECT_NAME} added to {bucketName} bucket");
+                string FinalStatus = $"Object {objectName} added to {bucketName} bucket";
+                Console.WriteLine(FinalStatus);
+                writeLogs(FinalStatus);
             }
             catch (AmazonS3Exception e)
             {
-                Console.WriteLine($"Error: {e.Message}");
+                string ErrorMessage = $"Error: {e.Message}";
+                Console.WriteLine(ErrorMessage);
+                writeLogs(ErrorMessage);
             }
+        }
+        private static void writeLogs(string log)
+        {
+            try
+            {
+                if (File.Exists(System.IO.Path.GetDirectoryName(
+                        System.Reflection.Assembly.GetExecutingAssembly().Location) + "/" + DomainConfigs.LogFileName))
+                {
+                    StreamWriter streamWriter = new StreamWriter(System.IO.Path.GetDirectoryName(
+                    System.Reflection.Assembly.GetExecutingAssembly().Location) + "/" + DomainConfigs.LogFileName,append:true);
+                    streamWriter.WriteLine(DateTime.Now.ToString("yyyy/MM/dd - HH:mm") + " : " + log);
+                    streamWriter.Close();
+                }
+            }
+            catch { }
         }
     }
 

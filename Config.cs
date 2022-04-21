@@ -12,6 +12,7 @@ namespace AutoBackupTool
         public string SecretKey { get; set; }
         public string AccessKey { get; set; }
         public string EndpointUrl { get; set; }
+        public string LogFileName { get; set; }
     }
 
     class SourceAndDestination

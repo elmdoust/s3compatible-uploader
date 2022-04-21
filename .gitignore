@@ -2,3 +2,4 @@ bin/Debug
 bin/Release/config.json
 .vs/
 obj/
+bin/Release/logs.txt
