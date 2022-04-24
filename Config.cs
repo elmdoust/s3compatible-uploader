@@ -17,7 +17,7 @@ namespace AutoBackupTool
 
     class SourceAndDestination
     {
-        public string Path { get; set; }
-        public string BucketName { get; set; }
+        public string SourceDirectoryPath { get; set; }
+        public string S3BucketName { get; set; }
     }
 }

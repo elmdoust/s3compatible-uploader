@@ -12,18 +12,16 @@ namespace AutoBackupTool
     class UploadObject
     {
         private static IAmazonS3 _s3Client;
-
-        //private const string BUCKET_NAME = "hamisheh-backup-database";
-        //private const string OBJECT_NAME = "abc.txt";
-        
         private static Config DomainConfigs;
         private static toolbox.Tools_Communication methods_com = new toolbox.Tools_Communication();
+
         static async Task Main()
         {
 
             StreamReader streamReader = new StreamReader(System.IO.Path.GetDirectoryName(
-      System.Reflection.Assembly.GetExecutingAssembly().Location) + "/config.json");
+            System.Reflection.Assembly.GetExecutingAssembly().Location) + "/config.json");
             string JsonConfig = streamReader.ReadToEnd();
+
             DomainConfigs = methods_com.DeserializeString<Config>(JsonConfig);
 
             var awsCredentials = new Amazon.Runtime.BasicAWSCredentials(DomainConfigs.AccessKey, DomainConfigs.SecretKey);
@@ -32,22 +30,22 @@ namespace AutoBackupTool
 
             foreach (SourceAndDestination item in DomainConfigs.Directories)
             {
-                if (Directory.Exists(item.Path))
+                if (Directory.Exists(item.SourceDirectoryPath))
                 {
-                    var directory = new DirectoryInfo(item.Path);
+                    var directory = new DirectoryInfo(item.SourceDirectoryPath);
                     var myFile = (from f in directory.GetFiles()
                                   orderby f.LastWriteTime descending
                                   select f).First();
 
                     //// The method expects the full path, including the file name.
-                    var path = $"{item.Path}/{myFile.Name}";
+                    var path = $"{item.SourceDirectoryPath}/{myFile.Name}";
                     Console.WriteLine("\n\n Please Wait, Object is uploading....... \n\n");
-                    await UploadObjectFromFileAsync(_s3Client, item.BucketName, myFile.Name, path);
+                    await UploadObjectFromFileAsync(_s3Client, item.S3BucketName, myFile.Name, path);
 
                 }
                 else
                 {
-                    writeLogs($"The directory {item.Path} didn't exist");
+                    writeLogs($"The directory {item.SourceDirectoryPath} didn't exist");
                 }
             }
             //Console.ReadKey();
