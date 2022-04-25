@@ -1,0 +1,15 @@
+{
+  "Directories": [
+    {
+      "Path": "d:/Backups/db",
+      "BucketName": "hamisheh-backup-database"
+    }
+    //you can add several directories and bucket names here
+  ],
+
+  "AutoMode":true,
+  "EndpointUrl": "<YOUR_S3COMPATIBLE_ENDPOINT_URL>",
+  "AccessKey": "<YOUR_ACCESS_KEY>",
+  "SecretKey": "<YOUR_SECRET_KEY>",
+  "LogFileName": "logs.txt"
+}
