@@ -2,7 +2,7 @@
   "Directories": [
     {
       "Path": "d:/Backups/db",
-      "BucketName": "hamisheh-backup-database"
+      "BucketName": "SomeBucketName"
     }
     //you can add several directories and bucket names here
   ],
