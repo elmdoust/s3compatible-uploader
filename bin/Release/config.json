@@ -13,7 +13,7 @@
       //you can add several directories and bucket names here
     ],
 
-  "AutoMode":true,
+  "AutoMode":false,
   "EndpointUrl": "<YOUR_S3COMPATIBLE_ENDPOINT_URL>",
   "AccessKey": "<YOUR_ACCESS_KEY>",
   "SecretKey": "<YOUR_SECRET_KEY>",
