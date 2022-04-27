@@ -2,10 +2,16 @@
   "Directories": [
     {
       "Path": "d:/Backups/db",
-      "BucketName": "SomeBucketName"
+      "BucketName": "SomeBucketName",
+	    "Policy":"ALL_FILES"
+    },
+	  {
+        "Path": "d:/Backups/files",
+        "BucketName": "SomeBucketName",
+	      "Policy":"LAST_CREATED"
     }
-    //you can add several directories and bucket names here
-  ],
+      //you can add several directories and bucket names here
+    ],
 
   "AutoMode":true,
   "EndpointUrl": "<YOUR_S3COMPATIBLE_ENDPOINT_URL>",

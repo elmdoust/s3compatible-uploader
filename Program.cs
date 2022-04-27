@@ -18,6 +18,8 @@ namespace AutoBackupTool
         static async Task Main()
         {
             
+            
+
             StreamReader streamReader = new StreamReader(System.IO.Path.GetDirectoryName(
             System.Reflection.Assembly.GetExecutingAssembly().Location) + "/config.json");
             string JsonConfig = streamReader.ReadToEnd();
@@ -43,15 +45,27 @@ namespace AutoBackupTool
                 {
                     if (Directory.Exists(item.SourceDirectoryPath))
                     {
-                        var directory = new DirectoryInfo(item.SourceDirectoryPath);
-                        var myFile = (from f in directory.GetFiles()
-                                      orderby f.LastWriteTime descending
-                                      select f).First();
-
-                        var path = $"{item.SourceDirectoryPath}/{myFile.Name}";
-                        Console.WriteLine("\n\n Please Wait, Object is uploading....... \n\n");
-                        await UploadObjectFromFileAsync(_s3Client, item.S3BucketName, myFile.Name, path);
-
+                        switch (item.Policy)
+                        {
+                            case "LAST_CREATED":
+                                var directory = new DirectoryInfo(item.SourceDirectoryPath);
+                                var myFile = (from f in directory.GetFiles()
+                                              orderby f.LastWriteTime descending
+                                              select f).First();
+                                
+                                var path = $"{item.SourceDirectoryPath}/{myFile.Name}";
+                                Console.WriteLine("\n\n Please Wait, Object is uploading....... \n\n");
+                                await UploadObjectFromFileAsync(_s3Client, item.S3BucketName, myFile.Name, path);
+                                break;
+                            case "ALL_FILES":
+                                string ZipFileName = $"{item.SourceDirectoryPath.Replace("/", "-").Replace(":","")}-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm")}.zip";
+                                Helpers.ZipFiles(item.SourceDirectoryPath, ZipFileName);
+                                
+                                Console.WriteLine("\n\n Please Wait, Object is uploading....... \n\n");
+                                await UploadObjectFromFileAsync(_s3Client, item.S3BucketName, ZipFileName, ZipFileName);
+                                File.Delete(ZipFileName);
+                                break;
+                        }
                     }
                     else
                     {
@@ -60,7 +74,7 @@ namespace AutoBackupTool
                 }
                 if (!DomainConfigs.AutoMode)
                 {
-                    Console.WriteLine("The job finished. see the result in log file. press any key to exit...");
+                    Console.WriteLine("\nThe job finished. see the result in log file. press any key to exit...");
                     Console.ReadKey();
                 }
             }

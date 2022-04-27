@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Ionic.Zip;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,5 +37,13 @@ namespace AutoBackupTool
             
         }
 
+        public static void ZipFiles(string path, string outputFileName)
+        {
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.AddDirectory(path);
+                zip.Save(outputFileName);
+            }
+        }
     }
 }

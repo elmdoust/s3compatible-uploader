@@ -20,5 +20,6 @@ namespace AutoBackupTool
     {
         public string SourceDirectoryPath { get; set; }
         public string S3BucketName { get; set; }
+        public string Policy { get; set; } //LAST_CREATED - ALL_FILES
     }
 }

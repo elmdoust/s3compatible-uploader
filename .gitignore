@@ -2,3 +2,4 @@ bin/Debug
 .vs/
 obj/
 bin/Release/logs.txt
+packages/
