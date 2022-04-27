@@ -3,7 +3,7 @@
 This is a simple console application for windows (any version) that developed using .net 4.7.2
 You can use it for uploading file to S3-Compatible storages (AWS or any other S3-Compatible storage providers)
 
-Dependencies :
+## Dependencies
 
 - .NetFramework 4.7.2
 - AWSSDK.S3 
