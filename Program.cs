@@ -55,7 +55,7 @@ namespace AutoBackupTool
                                               orderby f.LastWriteTime descending
                                               select f).First();
                                 var path = $"{item.SourceDirectoryPath}/{myFile.Name}";
-                                Console.WriteLine("\n\n Please Wait, Object is uploading....... \n\n");
+                                Console.WriteLine("\n\n Please Wait, Object is being uploaded....... \n\n");
                                 if (myFile.Length / 1024 / 1024 < 400)
                                     await UploadObjectFromFileAsync(_s3Client, item.S3BucketName, myFile.Name, path);
                                 else
@@ -63,10 +63,10 @@ namespace AutoBackupTool
                                 break;
                             case "ALL_FILES":
                                 string ZipFileName = $"{item.SourceDirectoryPath.Replace("/", "-").Replace(":", "")}-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm")}.zip";
-                                Console.WriteLine("\n\n Zip object is creating....... \n\n");
+                                Console.WriteLine("\n\n Zip object is being created....... \n\n");
                                 Helpers.ZipFiles(item.SourceDirectoryPath, ZipFileName);
                                 var myZipFileInfo = new FileInfo(ZipFileName);
-                                Console.WriteLine("\n\n Please Wait, Object is uploading....... \n\n");
+                                Console.WriteLine("\n\n Please Wait, Object is being uploaded....... \n\n");
                                 if (myZipFileInfo.Length / 1024 / 1024 < 400)
                                     await UploadObjectFromFileAsync(_s3Client, item.S3BucketName, ZipFileName, ZipFileName);
                                 else

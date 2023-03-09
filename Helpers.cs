@@ -41,6 +41,7 @@ namespace AutoBackupTool
         {
             using (ZipFile zip = new ZipFile())
             {
+                zip.UseZip64WhenSaving = Zip64Option.AsNecessary;                
                 zip.AddDirectory(path);
                 zip.Save(outputFileName);
             }
